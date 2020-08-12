@@ -2,16 +2,16 @@
 import os
 import json
 import random
-#from tqdm import tqdm
-#from java_tokenizer import *
+from tqdm import tqdm
+from java_tokenizer import *
 from collections import Counter
 import six
 
-# from bert_for_code.process_data.java_tokenizer import *
 
 # project_path = 'E:\\data\\java_stactic\\Java_1516_format\\Java_1516'
 # token_type_path = 'E:\data\java_stactic\java_token_type'
-# project_dict = json.loads(open('project_file_dict.json', 'r').read())
+project_dict = json.loads(open('project_file_dict.json', 'r').read())
+print(len(project_dict))
 
 def get_pre_train_projects():
     keys = list(project_dict.keys())
@@ -217,12 +217,13 @@ def create_training_corpus(pre_train_projects, project_dict, save_path):
     wf.close()
     return documents
 
-def create_training_withtype_corpus(pre_train_projects, project_dict, token_save_path, type_save_path):
+def create_withtype_corpus(projects, project_dict, project_path, token_save_path, token_type_path, type_save_path):
+    # project_dict: keys: project name values: paths for the files in the project
     wf_token = open(token_save_path, 'w', encoding='utf-8')
     wf_type = open(type_save_path, 'w', encoding='utf-8')
     documents = []
     documents_type = []
-    files = get_files(pre_train_projects, project_dict)
+    files = get_files(projects, project_dict)
     for file in tqdm(files):
         try:
             code, types = tokenize_file_withtype(os.path.join(project_path, file), os.path.join(token_type_path, file))
@@ -230,8 +231,6 @@ def create_training_withtype_corpus(pre_train_projects, project_dict, token_save
             continue
 
         assert len(code)==len(types)
-        # documents.append(code)
-        # documents_type.append(types)
         for i in range(len(code)):
             wf_token.write(json.dumps(code[i]) + '\n')
             wf_type.write(json.dumps(types[i]) + '\n')
@@ -242,8 +241,9 @@ def create_training_withtype_corpus(pre_train_projects, project_dict, token_save
     wf_type.close()
     return documents, documents_type
 
-# documents, documents_type = create_training_withtype_corpus(pre_train_projects, project_dict, 'training_token_corpus.txt', 'training_type_corpus.txt')
-# documents, documents_type = create_training_withtype_corpus(test_projects, project_dict, 'test_token_corpus.txt', 'test_type_corpus.txt')
+# project_dict: key: project name values: paths for the files in the projects
+# documents, documents_type = create_withtype_corpus(projects, project_dict, 'training_token_corpus.txt', 'training_type_corpus.txt')
+
 
 def save_vocab(data_path, size, path):
     with open(data_path, 'r', encoding='utf-8') as f:
@@ -256,16 +256,3 @@ def save_vocab(data_path, size, path):
         # print(tokens[:100])
         build_vocab(tokens, vocab_size=size, vocab_path=path)
 
-# with open('large_training_token_corpus.txt','r') as f:
-#     data = f.readlines()
-#     print(len(data))
-#     print(data[-10:])
-# with open('large_training_type_corpus.txt','r') as f:
-#     data = f.readlines()
-#     print(len(data))
-#     print(data[-10:])
-
-# save_vocab('/data/liufang/static_java/java_bert/large_training_token_corpus.txt', 50000, '/data/liufang/static_java/java_bert/large_vocab_token.txt')
-# save_vocab('/data/liufang/static_java/java_bert/large_training_type_corpus.txt', 50000, '/data/liufang/static_java/java_bert/large_vocab_type.txt')
-# word_to_id, vocab_size = read_vocab('large_vocab_token.txt')
-# print(word_to_id['[PAD]'])

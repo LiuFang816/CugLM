@@ -43,27 +43,26 @@ flags.DEFINE_string(
     "This specifies the model architecture.")
 
 flags.DEFINE_string(
-    "input_file", "/data2/liufang/java_bert/large_training_lm_token_type_instances_3.txt,/data2/liufang/java_bert/large_training_lm_token_type_instances_4.txt,/data2/liufang/java_bert/large_finetuning_lm_token_type_instances.txt",
-    "Input TF example files (can be a glob or comma separated).")
-
-
-flags.DEFINE_string(
-    "eval_input_file", "/data2/liufang/java_bert/test_lm_token_type_instances.txt",
+    "input_file", "finetuning_lm_token_type_instances.txt",
     "Input TF example files (can be a glob or comma separated).")
 
 flags.DEFINE_string(
-    "small_eval_input_file", "/data2/liufang/java_bert/small_test_lm_token_type_instances.txt",
+    "eval_input_file", "test_token_type_instances.txt",
     "Input TF example files (can be a glob or comma separated).")
 
-flags.DEFINE_string("token_vocab_file", '/data2/liufang/java_bert/large_vocab_token.txt',
+flags.DEFINE_string(
+    "small_eval_input_file", "small_test_token_type_instances.txt",
+    "Input TF example files (can be a glob or comma separated).")
+
+flags.DEFINE_string("token_vocab_file", 'vocab_token.txt',
                     "The token vocabulary file that the BERT model was trained on.")
 flags.DEFINE_string(
-    "output_dir", "/data2/liufang/java_bert/finetune_res_lm_concat_type-ULM",
+    "output_dir", "",
     "The output directory where the model checkpoints will be written.")
 
 ## Other parameters
 flags.DEFINE_string(
-    "init_checkpoint", "/data2/liufang/java_bert/finetune_res_lm_concat_type-ULM",
+    "init_checkpoint", "",
     "Initial checkpoint (usually from a pre-trained BERT model).")
 
 flags.DEFINE_integer(

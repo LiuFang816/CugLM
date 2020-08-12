@@ -43,27 +43,22 @@ flags.DEFINE_string(
     "This specifies the model architecture.")
 
 flags.DEFINE_string(
-    "input_file", "/data2/liufang/java_bert/large_training_lm_token_type_instances.txt,/data2/liufang/java_bert/large_training_lm_token_type_instances_1.txt,/data2/liufang/java_bert/large_training_lm_token_type_instances_2.txt",
-    "Input TF example files (can be a glob or comma separated).")
-
-
-flags.DEFINE_string(
-    "eval_input_file", "/data2/liufang/java_bert/test_lm_token_type_instances.txt",
+    "input_file", "training_token_type_instances.txt",
     "Input TF example files (can be a glob or comma separated).")
 
 flags.DEFINE_string(
-    "small_eval_input_file", "/data2/liufang/java_bert/small_test_lm_token_type_instances.txt",
+    "eval_input_file", "test_token_type_instances.txt",
     "Input TF example files (can be a glob or comma separated).")
 
-flags.DEFINE_string("token_vocab_file", '/data2/liufang/java_bert/large_vocab_token.txt',
+flags.DEFINE_string("token_vocab_file", 'vocab_token.txt',
                     "The token vocabulary file that the BERT model was trained on.")
 flags.DEFINE_string(
-    "output_dir", "/data2/liufang/java_bert/LARGE_pretraining_res_lm_concat_type_LM",
+    "output_dir", "",
     "The output directory where the model checkpoints will be written.")
 
 ## Other parameters
 flags.DEFINE_string(
-    "init_checkpoint", "/data2/liufang/java_bert/LARGE_pretraining_res_lm_concat_type_LM",
+    "init_checkpoint", "",
     "Initial checkpoint (usually from a pre-trained BERT model).")
 
 flags.DEFINE_integer(
@@ -77,7 +72,7 @@ flags.DEFINE_integer(
     "Maximum number of masked LM predictions per sequence. "
     "Must match data generation.")
 
-flags.DEFINE_bool("do_train", False, "Whether to run training.")
+flags.DEFINE_bool("do_train", True, "Whether to run training.")
 
 flags.DEFINE_bool("do_eval", False, "Whether to run eval on the dev set.")
 
@@ -731,7 +726,7 @@ def main(_):
 
         tf.logging.info("***** Running test *****")
         tf.logging.info("  Batch size = %d", FLAGS.eval_batch_size)
-        test_input_files = [FLAGS.small_eval_input_file]
+        test_input_files = [FLAGS.eval_input_file]
         test_input_fn = input_fn_builder(
             input_files=test_input_files,
             max_seq_length=FLAGS.max_seq_length,
@@ -741,7 +736,7 @@ def main(_):
         result = estimator.predict(
             input_fn=test_input_fn)
         tf.logging.info("***** Test results *****")
-        output_eval_file = os.path.join(FLAGS.output_dir, "small_id_eval_results.txt")
+        output_eval_file = os.path.join(FLAGS.output_dir, "id_eval_results.txt")
         with tf.gfile.GFile(output_eval_file, "w") as writer:
             for i, p in tqdm(enumerate(result)):
                 writer.write(str(p['masked_pre']) + ' ' + str(p['masked_tar']) + '\n')

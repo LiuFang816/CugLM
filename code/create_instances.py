@@ -29,20 +29,20 @@ flags = tf.flags
 
 FLAGS = flags.FLAGS
 
-flags.DEFINE_string("input_file", '/data2/liufang/java_bert/large_training_token_corpus.txt',
+flags.DEFINE_string("input_file", 'training_token_corpus.txt',
                     "Input raw text file (or comma-separated list of files).")
 
-flags.DEFINE_string("input_type_file", '/data2/liufang/java_bert/large_training_type_corpus.txt',
+flags.DEFINE_string("input_type_file", 'training_type_corpus.txt',
                     "Input type raw text file (or comma-separated list of files).")
 
 flags.DEFINE_string(
-    "output_file", '/data2/liufang/java_bert/large_training_lm_token_type_instances_4.txt',
+    "output_file", 'training_token_type_instances.txt',
     "Output TF example file (or comma-separated list of files).")
 
-flags.DEFINE_string("token_vocab_file", '/data2/liufang/java_bert/large_vocab_token.txt',
+flags.DEFINE_string("token_vocab_file", 'vocab_token.txt',
                     "The token vocabulary file that the BERT model was trained on.")
 
-flags.DEFINE_string("type_vocab_file", '/data2/liufang/java_bert/large_vocab_type.txt',
+flags.DEFINE_string("type_vocab_file", 'vocab_type.txt',
                     "The type vocabulary file that the BERT model was trained on.")
 
 flags.DEFINE_bool(
@@ -220,7 +220,7 @@ def create_training_instances(input_files, input_type_files, vocab, max_seq_leng
     with open(input_type_files, 'r', encoding='utf-8') as f:
         typedata = f.readlines()
     assert len(tokendata) == len(typedata) # 53904364
-    for i in tqdm(range(40000000, 50000000)):
+    for i in tqdm(range(len(tokendata))):
         tokenline = tokendata[i].strip()
         typeline = typedata[i].strip()
         if not tokenline:
