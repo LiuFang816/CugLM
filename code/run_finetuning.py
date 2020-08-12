@@ -21,7 +21,7 @@ from __future__ import print_function
 import os
 import modeling
 import optimization_gpu
-from create_data import *
+from create_data_corpus import *
 import tensorflow as tf
 from tensorflow.python.estimator.run_config import RunConfig
 from tensorflow.python.estimator.estimator import Estimator
@@ -47,11 +47,15 @@ flags.DEFINE_string(
     "Input TF example files (can be a glob or comma separated).")
 
 flags.DEFINE_string(
-    "eval_input_file", "test_token_type_instances.txt",
+    "eval_input_file", "eval_token_type_instances.txt",
     "Input TF example files (can be a glob or comma separated).")
 
 flags.DEFINE_string(
-    "small_eval_input_file", "small_test_token_type_instances.txt",
+    "test_input_file", "test_token_type_instances.txt",
+    "Input TF example files (can be a glob or comma separated).")
+
+flags.DEFINE_string(
+    "small_test_input_file", "small_test_token_type_instances.txt",
     "Input TF example files (can be a glob or comma separated).")
 
 flags.DEFINE_string("token_vocab_file", 'vocab_token.txt',
@@ -715,12 +719,12 @@ def main(_):
                 tf.logging.info("  %s = %s", key, str(result[key]))
                 writer.write("%s = %s\n" % (key, str(result[key])))
 
-        tf.logging.info("***** Running Small evaluation *****")
+        tf.logging.info("***** Running test *****")
         tf.logging.info("  Batch size = %d", FLAGS.eval_batch_size)
 
-        eval_input_files = [FLAGS.small_eval_input_file]
+        test_input_files = [FLAGS.test_input_file]
         eval_input_fn = input_fn_builder(
-            input_files=eval_input_files,
+            input_files=test_input_files,
             max_seq_length=FLAGS.max_seq_length,
             max_predictions_per_seq=FLAGS.max_predictions_per_seq,
             is_training=False)
@@ -728,9 +732,29 @@ def main(_):
         result = estimator.evaluate(
             input_fn=eval_input_fn, steps=FLAGS.max_eval_steps)
 
-        output_eval_file = os.path.join(FLAGS.output_dir, "small_eval_results.txt")
+        output_eval_file = os.path.join(FLAGS.output_dir, "test_results.txt")
         with tf.gfile.GFile(output_eval_file, "w") as writer:
-            tf.logging.info("***** Small Eval results *****")
+            tf.logging.info("***** Test results *****")
+            for key in sorted(result.keys()):
+                tf.logging.info("  %s = %s", key, str(result[key]))
+                writer.write("%s = %s\n" % (key, str(result[key])))
+
+        tf.logging.info("***** Running Small test *****")
+        tf.logging.info("  Batch size = %d", FLAGS.eval_batch_size)
+
+        small_test_input_files = [FLAGS.small_test_input_file]
+        eval_input_fn = input_fn_builder(
+            input_files=small_test_input_files,
+            max_seq_length=FLAGS.max_seq_length,
+            max_predictions_per_seq=FLAGS.max_predictions_per_seq,
+            is_training=False)
+
+        result = estimator.evaluate(
+            input_fn=eval_input_fn, steps=FLAGS.max_eval_steps)
+
+        output_eval_file = os.path.join(FLAGS.output_dir, "small_test_results.txt")
+        with tf.gfile.GFile(output_eval_file, "w") as writer:
+            tf.logging.info("***** Small Test results *****")
             for key in sorted(result.keys()):
                 tf.logging.info("  %s = %s", key, str(result[key]))
                 writer.write("%s = %s\n" % (key, str(result[key])))

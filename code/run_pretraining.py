@@ -21,7 +21,7 @@ from tqdm import tqdm
 import os
 import modeling
 import optimization_gpu
-from create_data import *
+from create_data_corpus import *
 import tensorflow as tf
 from tensorflow.python.estimator.run_config import RunConfig
 from tensorflow.python.estimator.estimator import Estimator

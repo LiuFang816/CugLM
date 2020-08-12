@@ -21,7 +21,7 @@ from tqdm import tqdm
 import collections
 import json
 import random
-from create_data import *
+from create_data_corpus import *
 # import tokenization
 import tensorflow as tf
 

@@ -6,12 +6,64 @@ from tqdm import tqdm
 from java_tokenizer import *
 from collections import Counter
 import six
+import tensorflow as tf
+
+flags = tf.flags
+
+FLAGS = flags.FLAGS
+
+flags.DEFINE_string("input_projects", '',
+                    "project list json file")
+
+flags.DEFINE_string("project_dict", '',
+                    "keys: project name values: paths for the files in the project")
+
+flags.DEFINE_string("token_file", '',
+                    "Output token file.")
+
+flags.DEFINE_string("type_file", '',
+                    "Output type file")
 
 
-# project_path = 'E:\\data\\java_stactic\\Java_1516_format\\Java_1516'
-# token_type_path = 'E:\data\java_stactic\java_token_type'
-project_dict = json.loads(open('project_file_dict.json', 'r').read())
-print(len(project_dict))
+def creat_token_types():
+    types_dir = 'E:\\data\\Java-gen'
+    project_file_dict = json.loads(open(FLAGS.project_dict, 'r').read())
+    save_dir = 'E:\\data\\java_token_type'
+    for key in project_file_dict:
+        project_name = key
+        project_files = project_file_dict[project_name]
+        for file in project_files:
+            if not os.path.exists(os.path.join(FLAGS.input_projects, file)):
+                continue
+            with open(os.path.join(FLAGS.input_projects, file), 'r', encoding='utf-8') as f:
+                text = f.read()
+            with open(os.path.join(FLAGS.input_projects, file), 'r', encoding='utf-8') as f:
+                text_lines = f.readlines()
+            tokens, _, _, indexes = tokenize_java(text, text_lines, True)
+            indexes = [str(index) for index in indexes]
+            token_type = [[token, ''] for token in tokens]
+            index_to_token_type = dict(zip(indexes, token_type))  # index: [token, '']
+            try:
+                with open(os.path.join(types_dir, file) + '.json', 'r') as f:
+                    data = json.loads(f.read())
+                    for item in data:
+                        if str([item[0], item[1]]) in index_to_token_type:
+                            index_to_token_type[str([item[0], item[1]])][1] = item[3:]
+            except:
+                pass
+            # print(index_to_token_type)
+            if not os.path.exists(os.path.split(os.path.join(save_dir, file))[0]):
+                os.makedirs(os.path.split(os.path.join(save_dir, file))[0])
+            try:
+                with open(os.path.join(save_dir, file), 'w') as f:
+                    f.write(json.dumps(index_to_token_type))
+            except:
+                pass
+
+
+# creat_token_types()
+
+
 
 def get_pre_train_projects():
     keys = list(project_dict.keys())
@@ -217,7 +269,7 @@ def create_training_corpus(pre_train_projects, project_dict, save_path):
     wf.close()
     return documents
 
-def create_withtype_corpus(projects, project_dict, project_path, token_save_path, token_type_path, type_save_path):
+def create_withtype_corpus(projects, project_dict, project_path, token_type_path, token_save_path, type_save_path):
     # project_dict: keys: project name values: paths for the files in the project
     wf_token = open(token_save_path, 'w', encoding='utf-8')
     wf_type = open(type_save_path, 'w', encoding='utf-8')
@@ -256,3 +308,16 @@ def save_vocab(data_path, size, path):
         # print(tokens[:100])
         build_vocab(tokens, vocab_size=size, vocab_path=path)
 
+def main(_):
+    creat_token_types()
+    projects = json.loads(open(FLAGS.input_projects, 'r').read())
+    project_dict = json.loads(open(FLAGS.project_dict, 'r').read())
+    token_corpus = FLAGS.token_file
+    type_corpus = FLAGS.type_file
+    project_path = 'E:\\data\\Java_data'
+    token_type_path = 'E:\\data\\java_token_type'
+    documents, documents_type = create_withtype_corpus(projects, project_dict, project_path, token_type_path, token_corpus, type_corpus)
+
+if __name__ == "__main__":
+
+    tf.app.run()
