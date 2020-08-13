@@ -3,11 +3,13 @@
 Recent studies have shown that statistical language modeling techniques can improve the performance of code completion tools through learning from large-scale software repositories. However, these models suffer from two major drawbacks: a) Existing research uses static embeddings, which map a word to the same vector regardless of its context. The differences in the meaning of a token in varying contexts are lost when each token is associated with a single representation; b) Existing LM-based code completion models perform poor on completing identifiers, and the type information of the identifiers is ignored in most of these models. To address these challenges, in this paper, we develop a multi-task learning based pre-trained language model for code understanding and code generation with a Transformer-based neural architecture. We pre-train it with hybrid objective functions that incorporate both code understanding and code generation tasks. Then we fine-tune the pre-trained model on code completion. During the completion, our model does not directly predict the next token. Instead, we adopt multi-task learning to predict the token and its type jointly and utilize the predicted type to assist the token prediction. 
 
 ## Datasets
-The project information are listed in the `data/JAVA_repos.txt` and `data/TS_repos.txt` files. For JAVA projetcs, each line represents a project which includes the GitHub username and project name connected by "_".
+The project information used in our paper are listed in the `data/JAVA_repos.txt` and `data/TS_repos.txt` files. For JAVA projetcs, each line represents a project which includes the GitHub username and project name connected by "_". 
+
+< You can use your own datasets of any languages by formating the programs into the following format.>
 
 **Data Preparation**
 
-+ create data corpus
++ Create data corpus
 
     data corpus format:
 
@@ -49,7 +51,7 @@ The project information are listed in the `data/JAVA_repos.txt` and `data/TS_rep
     ["tellh.com.gitclub.common.wrapper.Note.Note.mToast", "_", "android.widget.Toast.show", "_", "_", "_", "_"]
     ```
 
-+ create data instances
++ Create data instances
 
     ```
     python create_instances.py \
