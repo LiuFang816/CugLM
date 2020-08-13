@@ -65,45 +65,45 @@ The project information are listed in the `data/JAVA_repos.txt` and `data/TS_rep
 
 The model configuration is specified in `bert_config.json` file.
 
-    ```
-    python run_pretraining.py \
-      --input_file=$path_to_save_pre-training_data_instances$ \
-      --eval_input_file=$path_to_save_eval_data_instances$ \
-      --output_dir=$path_to_save model$ \
-      --token_vocab_file=$path_to_token_vocab_file$ \
-      --do_train=True \
-      --do_eval=True \
-      --bert_config_file=bert_config.json \
-      --train_batch_size=16 \
-      --max_seq_length=128 \
-      --max_predictions_per_seq=20 \
-      --num_train_steps=600000 \
-      --learning_rate=5e-5 \
-      --n_gpus=3 \
-      --gpu=0,1,2
+```
+python run_pretraining.py \
+  --input_file=$path_to_save_pre-training_data_instances$ \
+  --eval_input_file=$path_to_save_eval_data_instances$ \
+  --output_dir=$path_to_save model$ \
+  --token_vocab_file=$path_to_token_vocab_file$ \
+  --do_train=True \
+  --do_eval=True \
+  --bert_config_file=bert_config.json \
+  --train_batch_size=16 \
+  --max_seq_length=128 \
+  --max_predictions_per_seq=20 \
+  --num_train_steps=600000 \
+  --learning_rate=5e-5 \
+  --n_gpus=3 \
+  --gpu=0,1,2
     
-    ```
+```
 
 
 ## Model Fine-tuning
-    ```
-    python run_finetuning.py \
-      --input_file$path_to_save_fine-tuning_data_instances$ \
-      --eval_input_file=$path_to_save_eval_data_instances$ \
-      --test_input_file=$path_to_save_test_data_instances$ \
-      --small_input_file=$path_to_save_small_test_data_instances$ \
-      --output_dir=$path_to_save_model$ \
-      --token_vocab_file=$path_to_token_vocab_file$ \
-      --do_train=True \
-      --do_eval=True \
-      --bert_config_file=bert_config.json \
-      --train_batch_size=16 \
-      --max_seq_length=128 \
-      --max_predictions_per_seq=20 \
-      --num_train_steps=300000 \
-      --learning_rate=5e-5 \
-      --n_gpus=3 \
-      --gpu=0,1,2
-    ```
+```
+python run_finetuning.py \
+  --input_file$path_to_save_fine-tuning_data_instances$ \
+  --eval_input_file=$path_to_save_eval_data_instances$ \
+  --test_input_file=$path_to_save_test_data_instances$ \
+  --small_input_file=$path_to_save_small_test_data_instances$ \
+  --output_dir=$path_to_save_model$ \
+  --token_vocab_file=$path_to_token_vocab_file$ \
+  --do_train=True \
+  --do_eval=True \
+  --bert_config_file=bert_config.json \
+  --train_batch_size=16 \
+  --max_seq_length=128 \
+  --max_predictions_per_seq=20 \
+  --num_train_steps=300000 \
+  --learning_rate=5e-5 \
+  --n_gpus=3 \
+  --gpu=0,1,2
+```
     
 My implementation is mainly based on https://github.com/google-research/bert.
