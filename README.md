@@ -98,6 +98,7 @@ python run_finetuning.py \
   --token_vocab_file=$path_to_token_vocab_file$ \
   --do_train=True \
   --do_eval=True \
+  --LM True
   --bert_config_file=bert_config.json \
   --train_batch_size=16 \
   --max_seq_length=128 \

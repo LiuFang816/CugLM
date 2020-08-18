@@ -593,6 +593,7 @@ def embedding_postprocessor(input_tensor,
   output = layer_norm_and_dropout(output, dropout_prob)
   return output
 
+# for unidirectional LM
 def create_LM_att_mask(bz, qlen, mlen, same_length=False):
     attn_mask = tf.ones([qlen, qlen])
     # mask_u = tf.matrix_band_part(attn_mask, 0, -1)

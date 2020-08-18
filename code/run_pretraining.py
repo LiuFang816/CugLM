@@ -122,7 +122,7 @@ flags.DEFINE_integer(
     "num_tpu_cores", 8,
     "Only used if `use_tpu` is True. Total number of TPU cores to use.")
 
-flags.DEFINE_bool("LM", False, "Whether to operate LM pretraining.")
+flags.DEFINE_bool("LM", False, "Whether to operate unidirectional LM pretraining.")
 
 os.environ['CUDA_VISIBLE_DEVICES'] = FLAGS.gpu
 
