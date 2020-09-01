@@ -32,10 +32,10 @@ flags = tf.flags
 FLAGS = flags.FLAGS
 
 flags.DEFINE_integer(
-    "n_gpus", 2,
+    "n_gpus", 3,
     "GPU number")
 
-flags.DEFINE_string("gpu", "2", "gpu id")
+flags.DEFINE_string("gpu", "0,1,2", "gpu id")
 
 flags.DEFINE_string(
     "bert_config_file", "bert_config.json",

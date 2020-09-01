@@ -5,7 +5,7 @@ Recent studies have shown that statistical language modeling techniques can impr
 ## Datasets
 The project information used in our paper are listed in the `data/JAVA_repos.txt` and `data/TS_repos.txt` files. For JAVA projetcs, each line represents a project which includes the GitHub username and project name connected by "_". 
 
-< You can use your own datasets of any languages by formating the programs into the following format.>
+> You can use your own datasets of any languages by formating the programs into the following format:
 
 **Data Preparation**
 
@@ -21,9 +21,9 @@ The project information used in our paper are listed in the `data/JAVA_repos.txt
 
     **Type annotation:**
     For Java programs, we extract the identifiers' type information through static analysis. For TypeScript programs, we apply the approach in Hellendoorn et al. (Deep Learning Type Inference) to extract type annotations of the identifiers. 
-
+    
     a Java input example: 
-       
+   
     **token corpus:**
     
     ```
@@ -78,7 +78,7 @@ python run_pretraining.py \
   --bert_config_file=bert_config.json \
   --train_batch_size=16 \
   --max_seq_length=128 \
-  --max_predictions_per_seq=20 \
+  --max_predictions_per_seq=30 \
   --num_train_steps=600000 \
   --learning_rate=5e-5 \
   --n_gpus=3 \
@@ -102,7 +102,7 @@ python run_finetuning.py \
   --bert_config_file=bert_config.json \
   --train_batch_size=16 \
   --max_seq_length=128 \
-  --max_predictions_per_seq=20 \
+  --max_predictions_per_seq=30 \
   --num_train_steps=300000 \
   --learning_rate=5e-5 \
   --n_gpus=3 \
